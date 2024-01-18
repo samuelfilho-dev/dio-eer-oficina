@@ -128,7 +128,7 @@ classDiagram
     `Ordem de Serviço` "1" --* "N" `Ordem De Serviço_has_Serviço`: Tem
     `Peça` "1" --* "N" `Ordem De Serviço_has_Peça`: Tem
     `Serviço` "1" --* "N" `Ordem De Serviço_has_Serviço`: Tem
-    `Serviço` "1" --* "N" `Tabela de Referência`: Tem
+    `Serviço` "1" --* "N" `Tabela de Referência`: Possui
    
 
 
