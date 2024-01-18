@@ -1,12 +1,138 @@
 # Diagramas De EER 
-O repositório possui três diagramas de Entidade Relacionamento Estendido, sendo cada um aplicado em um contexto diferente.
+O repositório possui diagrama de Entidade Relacionamento Estendido no contexto de oficina de carro, seguindo os seguintes requisitos:
 
- - Sendo os contextos:
-    - [OS](https://github.com/samuelfilho-dev/dio-projeto-modelo-conceitual/tree/main/modelo_os)
-    - [Universidade](https://github.com/samuelfilho-dev/dio-projeto-modelo-conceitual/tree/main/universidade)
-    - [E-Commerce](https://github.com/samuelfilho-dev/dio-projeto-modelo-conceitual/tree/main/E-commerce)
+  - Sistema de controle e gerenciamento de execução de ordens de serviço em uma oficina mecânica
+  - Clientes levam veículos à oficina mecânica para serem consertados ou para passarem por revisões periódicas
+  - Cada veículo é designado a uma equipe de mecânicos que identifica os serviços a serem executados e preenche uma OS com data de entrega.
+  - A partir da OS, calcula-se o valor de cada serviço, consultando-se uma tabela de referência de mão-de-obra
+  - O valor de cada peça também irá compor a OS cliente autoriza a execução dos serviços
+  - A mesma equipe avalia e executa os serviços
+  - Os mecânicos possuem código, nome, endereço e especialidade
+  - Cada OS possui: n°, data de emissão, um valor, status e uma data para conclusão dos trabalhos.
 
 
+## Diagrama da Oficina
+```mermaid
+classDiagram
+    class Cliente {
+      - Interger idCliente
+      - String Nome
+      - String CPF
+      - String Email
+      - String Telefone
+      - Interger idEndereço
+    }
+
+    class Mecânico {
+      - Interger idMecânico
+      - String Código
+      - String Nome
+      - String Especialidade
+      - String Formação
+      - TIME Horas Trabalhadas
+      - Interger idEndereço
+      - Interger idEquipe
+    }
+
+    class `Endereço` {
+      - Interger idEndereço
+      - String Logradouro
+      - String Bairro
+      - String Cidade
+      - String Complemento
+      - String UF
+    }
+
+    class `Veículo` {
+      - Interger idVeículo
+      - String Marca
+      - String Modelo
+      - String Placa
+      - Interger Horímetro
+      - Interger idCliente
+    }
+
+    class `Manutenção` {
+      - Interger idVeículo
+      - Interger idEquipe
+      - TIMESTAMP Data Da Manutenção
+      - Interger Quilometragem
+      - String Comentários
+    }
+
+    class `Equipe do Mecânico` {
+      - Interger idEquipe
+      - String Código 
+      - String Categoria
+    }
+
+    class `Ordem de Serviço` {
+      - Interger idOS
+      - String Número da OS
+      - TIMESTAMP Data da Emissão
+      - Double Valor Total
+      - ENUM Status
+      - Boolean isRevisaoPeriodica
+      - TIMESTAMP Data de Aprovação
+      - TIMESTAMP Data de Entrega
+      - Double Valor da Peças
+      - Double Valor dos Serviços
+      - Interger idEquipe
+      - Interger idCliente
+    }
+
+    class `Peça` {
+      - Interger idPecas
+      - String Referência
+      - String Nome
+      - String Valor Unitario
+      - String Disponbilidade
+    }
+
+    class `Serviço` {
+      - Interger idServiço
+      - String Nome
+      - String Categoria do Serviço
+      - Double Valor Unitario
+    }
+
+    class `Tabela de Referência` {
+      - Interger idValorReferência
+      - String Nome
+      - String Categoria
+      - Double Valor de Referência
+      - Interger idServiço
+    }
+
+    class `Ordem De Serviço_has_Peça` {
+      - Interger idOS
+      - Interger idPecas
+      - Interger Quantidade
+    }
+
+    class `Ordem De Serviço_has_Serviço` {
+      - Interger idOS
+      - Interger idServiços
+      - Interger Quantidade
+    }
+
+    Cliente "1" .. "1" `Endereço`: Morar
+    Cliente "1" --* "N" `Veículo`: Possui
+    Cliente "1" --* "N" `Ordem de Serviço`: Aprova
+    Mecânico "1" .. "1" `Endereço`: Morar
+    `Veículo` "1" --* "N" `Manutenção`: Faz Manutenção
+    `Equipe do Mecânico` "1" --* "N" `Mecânico`: Tem
+    `Equipe do Mecânico` "1" --* "N" `Manutenção`: Faz Manutenção
+    `Equipe do Mecânico` "1" --* "N" `Ordem de Serviço`: Cria
+    `Ordem de Serviço` "1" --* "N" `Ordem De Serviço_has_Peça`: Tem
+    `Ordem de Serviço` "1" --* "N" `Ordem De Serviço_has_Serviço`: Tem
+    `Peça` "1" --* "N" `Ordem De Serviço_has_Peça`: Tem
+    `Serviço` "1" --* "N" `Ordem De Serviço_has_Serviço`: Tem
+    `Serviço` "1" --* "N" `Tabela de Referência`: Tem
+   
+
+
+```
 
 ## Contribuir
  - Se você deseja contribuir para o projeto, siga estes passos:
